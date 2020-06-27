@@ -8231,6 +8231,26 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: 2116692914220225438, guid: 3a0d1136bd7eec1438a40fa70b247d20,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: -0.32458556
+      objectReference: {fileID: 0}
+    - target: {fileID: 2116692914220225438, guid: 3a0d1136bd7eec1438a40fa70b247d20,
+        type: 3}
+      propertyPath: m_Offset.y
+      value: -0.5790527
+      objectReference: {fileID: 0}
+    - target: {fileID: 2116692914220225438, guid: 3a0d1136bd7eec1438a40fa70b247d20,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 3.521894
+      objectReference: {fileID: 0}
+    - target: {fileID: 2116692914220225438, guid: 3a0d1136bd7eec1438a40fa70b247d20,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 4.698962
+      objectReference: {fileID: 0}
     - target: {fileID: 3123114387432053288, guid: 3a0d1136bd7eec1438a40fa70b247d20,
         type: 3}
       propertyPath: m_Layer
