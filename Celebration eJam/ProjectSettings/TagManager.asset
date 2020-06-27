@@ -5,9 +5,16 @@ TagManager:
   serializedVersion: 2
   tags:
   - Cat
+<<<<<<< HEAD
   - Person
   - Ground
   - Walls
+=======
+  - Item
+  - Bed
+  - Hat
+  - Food
+>>>>>>> master
   layers:
   - Default
   - TransparentFX
@@ -18,7 +25,11 @@ TagManager:
   - 
   - 
   - Cat
+<<<<<<< HEAD
   - Person
+=======
+  - Line of Sight
+>>>>>>> master
   - 
   - 
   - 

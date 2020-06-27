@@ -8,10 +8,18 @@ using UnityEngine.Scripting.APIUpdating;
 public class Player : MonoBehaviour
 {
     PlayerInputManager controls; //class for controls
-    Rigidbody2D rb; //Player rigidbody
+    [HideInInspector]
+    public Rigidbody2D rb; //Player rigidbody
+
+    GameManager gameManager; //game manager
     
     bool canInteract = false; //Changes when player is near something interactable
+    bool pickup = false;
+    
+    bool canEat = false;
+    bool eat = false;
     Vector2 movementInput; //Holds left and right
+    string itemHeld = ""; //Saves the string of the picked up item
 
     public float jumpHeight = 5f; //How much force is added to the player
     public float movementSpeed = 5f;
@@ -22,7 +30,7 @@ public class Player : MonoBehaviour
         controls.Player.Jump.performed += ctx => Jump();
         
         rb = gameObject.GetComponent<Rigidbody2D>();
-
+        gameManager = GameObject.Find("GameManager").gameObject.GetComponent<GameManager>();
     }
 
     private void Jump()
@@ -37,6 +45,8 @@ public class Player : MonoBehaviour
         if (canInteract)
         {
             //call method if something is interactable
+            pickup = true;
+            eat = true;
         }
         else
         {
@@ -53,13 +63,56 @@ public class Player : MonoBehaviour
 
     private void LeftRight()
     {
-
         float horizontalInput = Input.GetAxis("Horizontal");
         if(horizontalInput != 0)
         {
             transform.position = new Vector3(transform.position.x + (horizontalInput * movementSpeed * Time.deltaTime), transform.position.y, transform.position.z);
+        } 
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag == "Item" || collision.gameObject.tag == "Food")
+        {
+            canInteract = true;
         }
+
+        if (collision.gameObject.tag == "Bed")
+        {
+            gameManager.GetItem(itemHeld);
+            Destroy(GameObject.Find(itemHeld));
+            itemHeld = "";
+        }
+    }
+
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        Debug.Log(collision.gameObject.tag);
         
+        if (collision.gameObject.tag == "Item")
+        {
+            canInteract = true;
+            if (pickup)
+            {
+                collision.gameObject.transform.SetParent(gameObject.transform.GetChild(0));
+                collision.gameObject.transform.localPosition = new Vector3(0, 0, 0);
+                pickup = false;
+                itemHeld = collision.gameObject.name;
+                collision.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            }
+        } else if (collision.gameObject.tag == "Food") {
+            canInteract = true;
+            if (eat) 
+                collision.gameObject.GetComponent<Food>()?.ApplyUpgrade(this);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision) {
+        if (collision.gameObject.tag == "Item" || collision.gameObject.tag == "Food") {
+            canInteract = false;
+        }
     }
 
     private void OnEnable()
