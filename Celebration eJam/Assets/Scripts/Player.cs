@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Scripting.APIUpdating;
 
+public enum PlayerState { Idling, Walking, Jumping }
+
 public class Player : MonoBehaviour
 {
     PlayerInputManager controls; //class for controls
@@ -28,8 +30,15 @@ public class Player : MonoBehaviour
     public bool[] areaTracker = new bool[5]; //Keeps track of what scene you're in so you're placed correctly in the next scene
     public float jumpHeight = 5f; //How much force is added to the player
     public float movementSpeed = 5f;
-    private void Awake()
-    {
+
+    private PlayerState _currentState = PlayerState.Idling;
+    private Animator _animator;
+    private SpriteRenderer _spriteRenderer;
+    
+    private void Awake() {
+        _animator = GetComponent<Animator>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        
         controls = new PlayerInputManager(); //assign controls class
         controls.Player.Interact.performed += ctx => Interact(); //triggers Spacebar method when spacebar is pressed
         controls.Player.Jump.performed += ctx => Jump();
@@ -70,16 +79,19 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
+    private void Update() {
         LeftRight();
     }
 
     private void LeftRight()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
-        if(horizontalInput != 0)
-        {
+        
+        _animator.SetFloat("x", horizontalInput);
+        _animator.SetFloat("y", rb.velocity.y);
+        
+        if(horizontalInput != 0) {
+            _spriteRenderer.flipX = horizontalInput > 0 ? true : false;
             transform.position = new Vector3(transform.position.x + (horizontalInput * movementSpeed * Time.deltaTime), transform.position.y, transform.position.z);
         } 
     }
@@ -88,6 +100,7 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.tag == "Ground")
         {
+            _animator.SetBool("Grounded", true);
             canJump = true;
         }
     }
@@ -104,6 +117,7 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.tag == "Ground")
         {
+            _animator.SetBool("Grounded", false);
             canJump = false;
         }
     }
