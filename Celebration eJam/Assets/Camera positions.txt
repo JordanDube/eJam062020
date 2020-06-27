@@ -1,0 +1,5 @@
+Scene 1 camera transform (0, 1, -10)
+Scene 2 camera transform (30, 1, -10)
+Scene 3 camera transform (60, 1, -10)
+Scene 4 camera transform (90, 1, -10)
+Scene 5 camera transform (120, 1, -10)
