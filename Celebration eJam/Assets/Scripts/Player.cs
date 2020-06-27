@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Scripting.APIUpdating;
 
+public enum PlayerState { Idling, Walking, Jumping }
+
 public class Player : MonoBehaviour
 {
     PlayerInputManager controls; //class for controls
@@ -15,25 +17,49 @@ public class Player : MonoBehaviour
     
     bool canInteract = false; //Changes when player is near something interactable
     bool pickup = false;
+    
+    bool canEat = false;
+    bool eat = false;
+    public bool canTravel = false;
+    public bool travel = false;
     Vector2 movementInput; //Holds left and right
     string itemHeld = ""; //Saves the string of the picked up item
+    int sceneMove; //Holds the numbered scene you want to go to
+    bool canJump = false; //if cat is touching ground, you can jump
 
+    public bool[] areaTracker = new bool[5]; //Keeps track of what scene you're in so you're placed correctly in the next scene
     public float jumpHeight = 5f; //How much force is added to the player
     public float movementSpeed = 5f;
-    private void Awake()
-    {
+
+    private PlayerState _currentState = PlayerState.Idling;
+    private Animator _animator;
+    private SpriteRenderer _spriteRenderer;
+    
+    private void Awake() {
+        _animator = GetComponent<Animator>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        
         controls = new PlayerInputManager(); //assign controls class
         controls.Player.Interact.performed += ctx => Interact(); //triggers Spacebar method when spacebar is pressed
         controls.Player.Jump.performed += ctx => Jump();
         
         rb = gameObject.GetComponent<Rigidbody2D>();
         gameManager = GameObject.Find("GameManager").gameObject.GetComponent<GameManager>();
+        areaTracker[0] = true;
     }
 
     private void Jump()
     {
-        Debug.Log("Jump performed");
-        rb.velocity = Vector2.up * jumpHeight;
+        if (canTravel)
+        {
+            travel = true;
+
+        }
+        else if (canJump)
+        {
+            rb.velocity = Vector2.up * jumpHeight;
+            canJump = false;
+        }
     }
 
     private void Interact()
@@ -44,6 +70,7 @@ public class Player : MonoBehaviour
         {
             //call method if something is interactable
             pickup = true;
+            eat = true;
         }
         else
         {
@@ -53,24 +80,52 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
+    private void Update() {
         LeftRight();
     }
 
     private void LeftRight()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
-        if(horizontalInput != 0)
-        {
+        
+        _animator.SetFloat("x", horizontalInput);
+        _animator.SetFloat("y", rb.velocity.y);
+        
+        if(horizontalInput != 0) {
+            _spriteRenderer.flipX = horizontalInput > 0 ? true : false;
             transform.position = new Vector3(transform.position.x + (horizontalInput * movementSpeed * Time.deltaTime), transform.position.y, transform.position.z);
         } 
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Ground")
+        {
+            _animator.SetBool("Grounded", true);
+            canJump = true;
+        }
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Ground")
+        {
+            canJump = true;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Ground")
+        {
+            _animator.SetBool("Grounded", false);
+            canJump = false;
+        }
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == "Item")
+        if(collision.gameObject.tag == "Item" || collision.gameObject.tag == "Food")
         {
             Debug.Log("ITEM HIT");
             canInteract = true;
@@ -82,11 +137,18 @@ public class Player : MonoBehaviour
             Destroy(GameObject.Find(itemHeld));
             itemHeld = "";
         }
+
+        if (collision.gameObject.tag == "Door")
+        {
+            canTravel = true;
+        }
     }
 
 
     private void OnTriggerStay2D(Collider2D collision)
     {
+        Debug.Log(collision.gameObject.tag);
+        
         if (collision.gameObject.tag == "Item")
         {
             canInteract = true;
@@ -161,6 +223,8 @@ public class Player : MonoBehaviour
             Debug.Log("Item left");
             canInteract = false;
         }
+        canTravel = false;
+        travel = false;
     }
 
     private void OnEnable()

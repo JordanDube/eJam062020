@@ -8,6 +8,11 @@ TagManager:
   - Item
   - Bed
   - Hat
+  - Food
+  - Door
+  - Ground
+  - Person
+  - Walls
   layers:
   - Default
   - TransparentFX
