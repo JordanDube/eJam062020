@@ -8,6 +8,7 @@ TagManager:
   - Item
   - Bed
   - Hat
+  - Food
   layers:
   - Default
   - TransparentFX

@@ -15,6 +15,9 @@ public class Player : MonoBehaviour
     
     bool canInteract = false; //Changes when player is near something interactable
     bool pickup = false;
+    
+    bool canEat = false;
+    bool eat = false;
     Vector2 movementInput; //Holds left and right
     string itemHeld = ""; //Saves the string of the picked up item
 
@@ -43,6 +46,7 @@ public class Player : MonoBehaviour
         {
             //call method if something is interactable
             pickup = true;
+            eat = true;
         }
         else
         {
@@ -69,7 +73,7 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == "Item")
+        if(collision.gameObject.tag == "Item" || collision.gameObject.tag == "Food")
         {
             canInteract = true;
         }
@@ -85,6 +89,8 @@ public class Player : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
+        Debug.Log(collision.gameObject.tag);
+        
         if (collision.gameObject.tag == "Item")
         {
             canInteract = true;
@@ -96,6 +102,16 @@ public class Player : MonoBehaviour
                 itemHeld = collision.gameObject.name;
                 collision.gameObject.GetComponent<BoxCollider2D>().enabled = false;
             }
+        } else if (collision.gameObject.tag == "Food") {
+            canInteract = true;
+            if (eat) 
+                collision.gameObject.GetComponent<Food>()?.ApplyUpgrade(this);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision) {
+        if (collision.gameObject.tag == "Item" || collision.gameObject.tag == "Food") {
+            canInteract = false;
         }
     }
 
