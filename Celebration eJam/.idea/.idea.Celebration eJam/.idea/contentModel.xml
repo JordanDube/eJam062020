@@ -4,6 +4,7 @@
     <e p="C:\Git Repos\eJam062020\Celebration eJam" t="IncludeRecursive">
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
+        <e p="Camera positions.txt" t="Include" />
         <e p="Input" t="Include">
           <e p="PlayerInputManager.cs" t="Include" />
         </e>
