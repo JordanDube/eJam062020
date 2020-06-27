@@ -11,6 +11,8 @@ TagManager:
   - Food
   - Door
   - Ground
+  - Person
+  - Walls
   layers:
   - Default
   - TransparentFX
@@ -22,7 +24,7 @@ TagManager:
   - 
   - Cat
   - Line of Sight
-  - 
+  - Person
   - 
   - 
   - 
@@ -47,4 +49,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Person
+    uniqueID: 2077445643
+    locked: 0
+  - name: Cat
+    uniqueID: 740976829
     locked: 0
