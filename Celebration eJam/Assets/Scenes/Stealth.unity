@@ -267,6 +267,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
+  canTravel: 0
+  travel: 0
+  areaTracker: 0000000000
   jumpHeight: 5
   movementSpeed: 5
 --- !u!114 &397388032
@@ -536,6 +539,8 @@ MonoBehaviour:
   cards: 0
   balloon: 0
   partyPopper: 0
+  cameraX: 
+  mainCam: {fileID: 0}
 --- !u!4 &1034911109
 Transform:
   m_ObjectHideFlags: 0
@@ -864,7 +869,7 @@ GameObject:
   - component: {fileID: 1769213073}
   m_Layer: 0
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
