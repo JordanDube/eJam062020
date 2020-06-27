@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Cat
+  - Person
+  - Ground
+  - Walls
   layers:
   - Default
   - TransparentFX
@@ -14,8 +17,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Cat
+  - Person
   - 
   - 
   - 
@@ -41,4 +44,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Cat
+    uniqueID: 4013666567
+    locked: 0
+  - name: Objects
+    uniqueID: 3966265703
     locked: 0
