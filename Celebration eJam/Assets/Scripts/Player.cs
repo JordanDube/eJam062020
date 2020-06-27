@@ -75,6 +75,8 @@ public class Player : MonoBehaviour
         if (collision.gameObject.tag == "Bed")
         {
             gameManager.GetItem(itemHeld);
+            Destroy(GameObject.Find(itemHeld));
+            itemHeld = "";
         }
     }
 
@@ -89,7 +91,7 @@ public class Player : MonoBehaviour
                 collision.gameObject.transform.SetParent(gameObject.transform.GetChild(0));
                 collision.gameObject.transform.localPosition = new Vector3(0, 0, 0);
                 pickup = false;
-                itemHeld = collision.gameObject.tag;
+                itemHeld = collision.gameObject.name;
                 collision.gameObject.GetComponent<BoxCollider2D>().enabled = false;
             }
         }

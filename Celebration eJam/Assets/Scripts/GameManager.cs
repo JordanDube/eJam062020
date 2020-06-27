@@ -13,24 +13,13 @@ public class GameManager : MonoBehaviour
     public bool balloon = false;
     public bool partyPopper = false;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void GetItem(string item)
     {
         switch(item)
         {
             case "Hat": //check off hat
-                Debug.Log("Got the hat!");
+                Debug.Log("Got the hat");
                 break;
             case "Noise Maker": //check off hat
                 break;
@@ -48,4 +37,5 @@ public class GameManager : MonoBehaviour
                 break;
         }
     }
+    
 }
