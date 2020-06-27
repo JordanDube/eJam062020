@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class LineOfSight : MonoBehaviour {
@@ -37,6 +36,11 @@ public class LineOfSight : MonoBehaviour {
     }
   }
 
+  public void EnableLineOfSight() {
+    _spriteRenderer.enabled = true;
+    _polygonCollider2D.enabled = true;
+  }
+  
   public void IsLooking() {
     _animator.SetBool("isLooking", true);
   }
