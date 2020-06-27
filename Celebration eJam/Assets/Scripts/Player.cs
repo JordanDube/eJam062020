@@ -34,7 +34,9 @@ public class Player : MonoBehaviour
     private PlayerState _currentState = PlayerState.Idling;
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
-    
+    AudioSource audioSource;
+    public AudioClip[] meow;
+
     private void Awake() {
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -46,6 +48,7 @@ public class Player : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody2D>();
         gameManager = GameObject.Find("GameManager").gameObject.GetComponent<GameManager>();
         areaTracker[0] = true;
+        audioSource = gameObject.GetComponent<AudioSource>();
     }
 
     private void Jump()
@@ -67,15 +70,12 @@ public class Player : MonoBehaviour
 
         if (canInteract)
         {
-            //call method if something is interactable
             pickup = true;
             eat = true;
         }
         else
         {
-            Debug.Log("Meow");
-            //Audio to make meow
-            //Animation for meow
+            audioSource.PlayOneShot(meow[UnityEngine.Random.Range(0, 12)]);
         }
     }
 
