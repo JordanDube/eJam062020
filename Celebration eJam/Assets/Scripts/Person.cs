@@ -120,7 +120,7 @@ public class Person : MonoBehaviour
         }
     }
 
-    private void AlertedToTransform(Transform transform)
+    public void AlertedToTransform(Transform transform)
     {
         TargetTransform = transform;
         CurrentState = PersonState.Alerted;
