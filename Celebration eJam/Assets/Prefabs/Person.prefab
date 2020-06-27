@@ -145,6 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f0c005b0a0ee294fa64ef06634cee65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AreaStartingPoint: 0
   clip:
   - {fileID: 8300000, guid: 72824c6c353ea32429c8f6589e2f173a, type: 3}
   - {fileID: 8300000, guid: e5949c1a673798846990248e0115fd72, type: 3}
@@ -260,7 +261,7 @@ PrefabInstance:
     - target: {fileID: 2920019291551324576, guid: 437757c4ad063444b9b2607cd1add38a,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2920019291551324576, guid: 437757c4ad063444b9b2607cd1add38a,
         type: 3}
@@ -325,7 +326,7 @@ PrefabInstance:
     - target: {fileID: 2920019291551324577, guid: 437757c4ad063444b9b2607cd1add38a,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2920019291551324577, guid: 437757c4ad063444b9b2607cd1add38a,
         type: 3}
