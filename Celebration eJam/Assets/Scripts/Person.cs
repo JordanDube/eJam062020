@@ -6,6 +6,8 @@ public enum PersonState { Resting, Roaming, Alerted, Chasing, Petting }
 
 public class Person : MonoBehaviour
 {
+    AudioSource audioSource;
+    [SerializeField] AudioClip[] clip = new AudioClip[4];
     private float StateTimer { get; set; }
     public float StateTimerDefault { get; set; } = 2f;
 
@@ -15,6 +17,11 @@ public class Person : MonoBehaviour
     private float TargetThreshold { get; set; } = 2f;
 
     PersonState CurrentState = PersonState.Resting;
+
+    private void Awake()
+    {
+        audioSource = gameObject.GetComponent<AudioSource>();
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -59,6 +66,10 @@ public class Person : MonoBehaviour
                 {
                     StateTimer = StateTimerDefault * Random.Range(5f, 7f);
                     CurrentState = PersonState.Roaming;
+                    if (!audioSource.isPlaying)
+                    {
+                        audioSource.PlayOneShot(clip[0]);
+                    }
                 }
 
                 if (Random.Range(0f, 10f) > 5)
@@ -92,15 +103,15 @@ public class Person : MonoBehaviour
         switch (CurrentState)
         {
             case PersonState.Roaming:
-                
 
                 float roamingMoveAmount = Random.Range(1, 100) * 0.1f * Time.deltaTime * (FacingRight ? 1 : -1);
                 transform.position = new Vector3(transform.position.x + roamingMoveAmount, transform.position.y, transform.position.z);
                 break;
             case PersonState.Alerted:
+ 
                 if (TargetTransform != null)
                 {
-
+                    
                     FacingRight = TargetTransform.position.x > gameObject.transform.position.x;
                     bool closeToTarget = FacingRight ? TargetTransform.position.x - gameObject.transform.position.x < TargetThreshold : gameObject.transform.position.x - TargetTransform.position.x < TargetThreshold;
                     if (closeToTarget)
@@ -137,6 +148,10 @@ public class Person : MonoBehaviour
     {
         TargetTransform = transform;
         CurrentState = PersonState.Alerted;
+        if (!audioSource.isPlaying)
+        {
+            audioSource.PlayOneShot(clip[1]);
+        }
     }
 
 }
