@@ -11,6 +11,8 @@ public class Person : MonoBehaviour
 
     private bool FacingRight { get; set; }
 
+    private Transform TargetTransform { get; set; }
+    private float TargetThreshold { get; set; } = 2f;
 
     PersonState CurrentState = PersonState.Resting;
     // Start is called before the first frame update
@@ -21,20 +23,13 @@ public class Person : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log(collision.gameObject.name + "COLL");
+        Debug.Log(gameObject.name + " Collided With " + collision.gameObject.name +" With Tag: "+ collision.gameObject.tag );
         if (collision.gameObject.tag == "Walls")
         {
             FacingRight = !FacingRight;
         }
     }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        Debug.Log(collision.gameObject.name + "Trigger");
-        if (collision.gameObject.tag == "Walls")
-        {
-            FacingRight = !FacingRight;
-        }
-    }
+
 
     // Update is called once per frame
     void Update()
@@ -86,11 +81,49 @@ public class Person : MonoBehaviour
             case PersonState.Roaming:
 
 
-                float moveAmount = Random.Range(1, 100) * 0.1f * Time.deltaTime * (FacingRight ? 1 : -1);
-                transform.position = new Vector3(transform.position.x + moveAmount, transform.position.y, transform.position.z);
+                float roamingMoveAmount = Random.Range(1, 100) * 0.1f * Time.deltaTime * (FacingRight ? 1 : -1);
+                transform.position = new Vector3(transform.position.x + roamingMoveAmount, transform.position.y, transform.position.z);
+                break;
+            case PersonState.Alerted:
+                if (TargetTransform != null)
+                {
+
+                    FacingRight = TargetTransform.position.x > gameObject.transform.position.x;
+                    bool closeToTarget = FacingRight ? TargetTransform.position.x - gameObject.transform.position.x < TargetThreshold : gameObject.transform.position.x - TargetTransform.position.x < TargetThreshold;
+                    if (closeToTarget)
+                    {
+                        TargetTransform = null;
+                        StateTimer = StateTimerDefault * Random.Range(0.5f, 2f);
+
+                    }
+                    else
+                    {
+                        float alertedMoveAmount = 15 * Time.deltaTime * (FacingRight ? 1 : -1);
+                        transform.position = new Vector3(transform.position.x + alertedMoveAmount, transform.position.y, transform.position.z);
+                    }
+
+                }
+                else
+                {
+                    if (StateTimer > 0)
+                    {
+                        StateTimer -= Time.deltaTime;
+                    }
+                    else
+                    {
+                        StateTimer = StateTimerDefault * Random.Range(0.5f, 2f);
+                        CurrentState = PersonState.Resting;
+                    }
+                }
                 break;
 
         }
+    }
+
+    public void AlertedToTransform(Transform transform)
+    {
+        TargetTransform = transform;
+        CurrentState = PersonState.Alerted;
     }
 
 }
