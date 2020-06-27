@@ -6,8 +6,14 @@ public enum PersonState { Resting, Roaming, Alerted, Chasing, Petting }
 
 public class Person : MonoBehaviour
 {
+
+    [SerializeField]
+    public int AreaStartingPoint;
+
     AudioSource audioSource;
-    [SerializeField] AudioClip[] clip = new AudioClip[4];
+
+    [SerializeField]
+    AudioClip[] clip = new AudioClip[4];
     private float StateTimer { get; set; }
     public float StateTimerDefault { get; set; } = 2f;
 
@@ -24,6 +30,7 @@ public class Person : MonoBehaviour
 
 
     PersonState CurrentState = PersonState.Resting;
+    
 
     private void Awake()
     {
@@ -33,7 +40,7 @@ public class Person : MonoBehaviour
     void Start()
     {
         StateTimer = StateTimerDefault;
-        areaTracker[0] = true;
+        areaTracker[AreaStartingPoint] = true;
         gameManager = GameObject.Find("GameManager").gameObject.GetComponent<GameManager>();
 
     }
