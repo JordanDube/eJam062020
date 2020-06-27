@@ -8,7 +8,8 @@ using UnityEngine.Scripting.APIUpdating;
 public class Player : MonoBehaviour
 {
     PlayerInputManager controls; //class for controls
-    Rigidbody2D rb; //Player rigidbody
+    [HideInInspector]
+    public Rigidbody2D rb; //Player rigidbody
     GameManager gameManager; //game manager
     
     bool canInteract = false; //Changes when player is near something interactable
