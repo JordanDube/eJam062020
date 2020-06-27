@@ -5,8 +5,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Scripting.APIUpdating;
 
-public enum PlayerState { Idling, Walking, Jumping }
-
 public class Player : MonoBehaviour
 {
     PlayerInputManager controls; //class for controls
@@ -31,13 +29,15 @@ public class Player : MonoBehaviour
     public float jumpHeight = 5f; //How much force is added to the player
     public float movementSpeed = 5f;
 
-    private PlayerState _currentState = PlayerState.Idling;
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
-    
+    private GameClock _gameClock;
+
     private void Awake() {
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+
+        _gameClock = FindObjectOfType<GameClock>();
         
         controls = new PlayerInputManager(); //assign controls class
         controls.Player.Interact.performed += ctx => Interact(); //triggers Spacebar method when spacebar is pressed
@@ -48,6 +48,13 @@ public class Player : MonoBehaviour
         areaTracker[0] = true;
     }
 
+    private bool GameIsOver() {
+        if (_gameClock)
+            return _gameClock.gameIsOver;
+
+        return false;
+    }
+    
     private void Jump()
     {
         if (canTravel)
@@ -55,7 +62,7 @@ public class Player : MonoBehaviour
             travel = true;
 
         }
-        else if (canJump)
+        else if (canJump && !GameIsOver())
         {
             rb.velocity = Vector2.up * jumpHeight;
             canJump = false;
@@ -90,7 +97,7 @@ public class Player : MonoBehaviour
         _animator.SetFloat("x", horizontalInput);
         _animator.SetFloat("y", rb.velocity.y);
         
-        if(horizontalInput != 0) {
+        if(horizontalInput != 0 && !GameIsOver()) {
             _spriteRenderer.flipX = horizontalInput > 0 ? true : false;
             transform.position = new Vector3(transform.position.x + (horizontalInput * movementSpeed * Time.deltaTime), transform.position.y, transform.position.z);
         } 
