@@ -109,6 +109,12 @@ public class Person : MonoBehaviour
                     StateTimer = StateTimerDefault * Random.Range(5f, 7f);
                     CurrentState = PersonState.Roaming;
                     canTravel = true;
+
+                    //CHANGING STATE TO ROAMING
+                    //
+                    //ONE TIME STATE CHANGE CODE HERE
+                    //
+
                 }
 
                 if (Random.Range(0f, 10f) > 5)
@@ -127,6 +133,10 @@ public class Person : MonoBehaviour
                 {
                     StateTimer = StateTimerDefault * Random.Range(0.5f, 2f);
                     CurrentState = PersonState.Resting;
+                    //CHANGING STATE TO RESTING
+                    //
+                    //ONE TIME STATE CHANGE CODE HERE
+                    //
                 }
                 break;
         }
@@ -193,6 +203,12 @@ public class Person : MonoBehaviour
     {
         TargetTransform = transform;
         CurrentState = PersonState.Alerted;
+
+        //CHANGING STATE TO ALERTED
+        //
+        //ONE TIME STATE CHANGE CODE HERE
+        //
+
     }
 
 }
