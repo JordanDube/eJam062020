@@ -77,7 +77,8 @@ public class Player : MonoBehaviour
 
     private void Interact()
     {
-
+        Debug.Log("INTERACT");
+        Debug.Log(canInteract);
         if (canInteract)
         {
             pickup = true;
@@ -136,6 +137,7 @@ public class Player : MonoBehaviour
     {
         if(collision.gameObject.tag == "Item" || collision.gameObject.tag == "Food")
         {
+            Debug.Log("ITEM HIT");
             canInteract = true;
         }
 
@@ -160,8 +162,12 @@ public class Player : MonoBehaviour
         if (collision.gameObject.tag == "Item")
         {
             canInteract = true;
+            Debug.Log(pickup);
+
             if (pickup)
             {
+                Debug.Log(collision.gameObject.tag +" PICKUP");
+
                 collision.gameObject.transform.SetParent(gameObject.transform.GetChild(0));
                 collision.gameObject.transform.localPosition = new Vector3(0, 0, 0);
                 pickup = false;
@@ -224,6 +230,7 @@ public class Player : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision) {
         if (collision.gameObject.tag == "Item" || collision.gameObject.tag == "Food") {
+            Debug.Log("Item left");
             canInteract = false;
         }
         canTravel = false;
