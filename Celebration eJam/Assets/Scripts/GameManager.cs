@@ -21,11 +21,11 @@ public class GameManager : MonoBehaviour
             case "Hat": //check off hat
                 Debug.Log("Got the hat");
                 break;
-            case "Noise Maker": //check off hat
+            case "Noise Maker": //check off rubber duck
                 break;
-            case "Streamers": //check off hat
+            case "Streamers": //check off blinds
                 break;
-            case "Cups": //check off hat
+            case "Cups": //check off cups
                 break;
             case "Cake": //check off hat
                 break;
