@@ -9,6 +9,8 @@ TagManager:
   - Bed
   - Hat
   - Food
+  - Door
+  - Ground
   layers:
   - Default
   - TransparentFX
