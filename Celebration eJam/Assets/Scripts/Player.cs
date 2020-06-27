@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
 {
     PlayerInputManager controls; //class for controls
     Rigidbody2D rb; //Player rigidbody
-    Keyboard kb;
+    
     bool canInteract = false; //Changes when player is near something interactable
     Vector2 movementInput; //Holds left and right
 
@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
         controls = new PlayerInputManager(); //assign controls class
         controls.Player.Interact.performed += ctx => Interact(); //triggers Spacebar method when spacebar is pressed
         controls.Player.Jump.performed += ctx => Jump();
-        kb = InputSystem.GetDevice<Keyboard>();
+        
         rb = gameObject.GetComponent<Rigidbody2D>();
 
     }
@@ -29,11 +29,6 @@ public class Player : MonoBehaviour
     {
         Debug.Log("Jump performed");
         rb.velocity = Vector2.up * jumpHeight;
-    }
-
-    private void Move(float direction)
-    {
-        transform.position = new Vector2(direction * movementSpeed * Time.deltaTime, transform.position.y);
     }
 
     private void Interact()
