@@ -198,7 +198,7 @@ public class Player : MonoBehaviour
                 {
                     if (areaTracker[i])
                     {
-                        gameManager.SwitchScene(sceneMove, i);
+                        gameManager.SwitchPlayerScene(sceneMove, i);
                         areaTracker[i] = false;
                         areaTracker[sceneMove] = true; //makes the scene you're moving to the current scene
                         break;

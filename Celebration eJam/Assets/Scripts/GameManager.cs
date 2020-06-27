@@ -46,48 +46,59 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SwitchScene(int toLocation, int fromLocation)
+    public void SwitchPlayerScene(int toLocation, int fromLocation)
     {
+        SwitchScene(toLocation, fromLocation,player.gameObject.transform);
+
+        player.canTravel = false;
+        player.travel = false;
+        mainCam.transform.position = new Vector3(cameraX[toLocation], 1, -10);
+    }
+
+    public void SwitchScene(int toLocation, int fromLocation,Transform transform = null)
+    {
+        if(transform == null)
+        {
+            return;
+        }
+
         switch(toLocation)
         {
             case 0:
                 switch (fromLocation)
                 {
                     case 1: //cat's location from the kitchen
-                        player.gameObject.transform.position = new Vector3(7.27f, -3.21f, 0f);
+                        transform.position = new Vector3(7.27f, transform.position.y, 0f);
                         break;
                     case 2: //cat's location from coming dow nthe stairs
-                        player.gameObject.transform.position = new Vector3(-7.05f, -3.21f, 0f);
+                        transform.position = new Vector3(-7.05f, transform.position.y, 0f);
                         break;
                 }
                 break;
             case 1: //cat's location from livingroom
-                player.gameObject.transform.position = new Vector3(37f, -3.21f, 0f);
+                transform.position = new Vector3(24f, transform.position.y, 0f);
                 break;
             case 2: switch(fromLocation)
             {
                 case 0: //cat's location from coming up the stairs
-                        player.gameObject.transform.position = new Vector3(60.5f, -3.21f, 0f);
+                        transform.position = new Vector3(60.5f,transform.position.y, 0f);
                         break;
                 case 3: //cat's location from the bedroom
-                        player.gameObject.transform.position = new Vector3(53.8f, -3.21f, 0f);
+                        transform.position = new Vector3(53.8f,transform.position.y, 0f);
                         break;
                 case 4: //cat's location from the bathroom
-                        player.gameObject.transform.position = new Vector3(66.8f, -3.21f, 0f);
+                        transform.position = new Vector3(66.8f,transform.position.y, 0f);
                         break;
             }
                 break;
             case 3: //cat's location form the hallway
-                player.gameObject.transform.position = new Vector3(95.75f, -3.21f, 0f);
+                transform.position = new Vector3(95.75f, transform.position.y, 0f);
                 break;
             case 4: //cat's location from hallway
-                player.gameObject.transform.position = new Vector3(114.23f, -3.21f, 0f);
+                transform.position = new Vector3(114.23f, transform.position.y, 0f);
                 break;
 
         }
-        player.canTravel = false;
-        player.travel = false;
-        mainCam.transform.position = new Vector3(cameraX[toLocation], 1, -10);
 
     }
     
