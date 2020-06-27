@@ -15,7 +15,9 @@ public class Player : MonoBehaviour
     
     bool canInteract = false; //Changes when player is near something interactable
     bool pickup = false;
-    
+
+    private GameObject interactableObject { get; set; }
+
     bool canEat = false;
     bool eat = false;
     public bool canTravel = false;
@@ -91,7 +93,38 @@ public class Player : MonoBehaviour
     }
 
     private void Update() {
+
+        InteractWithObject();
+
         LeftRight();
+    }
+
+    private void InteractWithObject()
+    {
+        if (interactableObject != null)
+        {
+            if (interactableObject.gameObject.tag == "Item")
+            {
+                canInteract = true;
+
+                if (pickup)
+                {
+                    Debug.Log(interactableObject.gameObject.tag + " PICKUP");
+
+                    interactableObject.gameObject.transform.SetParent(gameObject.transform.Find("ItemSpace"));
+                    interactableObject.gameObject.transform.localPosition = new Vector3(0, 0, -1);
+                    pickup = false;
+                    itemHeld = interactableObject.gameObject.name;
+                    interactableObject.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+                }
+            }
+            else if (interactableObject.gameObject.tag == "Food")
+            {
+                canInteract = true;
+                if (eat)
+                    interactableObject.gameObject.GetComponent<Food>()?.ApplyUpgrade(this);
+            }
+        }
     }
 
     private void LeftRight()
@@ -103,6 +136,8 @@ public class Player : MonoBehaviour
         
         if(horizontalInput != 0 && !GameIsOver()) {
             _spriteRenderer.flipX = horizontalInput > 0 ? true : false;
+            var itemSpace = gameObject.transform.Find("ItemSpace");
+            itemSpace.transform.localPosition = new Vector3(horizontalInput>0? 6.08f : -6.08f, itemSpace.transform.localPosition.y,itemSpace.transform.localPosition.z);
             transform.position = new Vector3(transform.position.x + (horizontalInput * movementSpeed * Time.deltaTime), transform.position.y, transform.position.z);
         } 
     }
@@ -139,6 +174,9 @@ public class Player : MonoBehaviour
         {
             Debug.Log("ITEM HIT");
             canInteract = true;
+
+            interactableObject = collision.gameObject;
+            Debug.Log(interactableObject.name);
         }
 
         if (collision.gameObject.tag == "Bed")
@@ -157,29 +195,9 @@ public class Player : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        Debug.Log(collision.gameObject.tag);
         
-        if (collision.gameObject.tag == "Item")
-        {
-            canInteract = true;
-            Debug.Log(pickup);
-
-            if (pickup)
-            {
-                Debug.Log(collision.gameObject.tag +" PICKUP");
-
-                collision.gameObject.transform.SetParent(gameObject.transform.FindChild("ItemSpace"));
-                collision.gameObject.transform.localPosition = new Vector3(0, 0, -1);
-                pickup = false;
-                itemHeld = collision.gameObject.name;
-                collision.gameObject.GetComponent<BoxCollider2D>().enabled = false;
-            }
-        } 
-        else if (collision.gameObject.tag == "Food") {
-            canInteract = true;
-            if (eat) 
-                collision.gameObject.GetComponent<Food>()?.ApplyUpgrade(this);
-        }
+        
+        
         
         if (collision.gameObject.tag == "Door")
         {
@@ -232,6 +250,10 @@ public class Player : MonoBehaviour
         if (collision.gameObject.tag == "Item" || collision.gameObject.tag == "Food") {
             Debug.Log("Item left");
             canInteract = false;
+
+            interactableObject = null;
+
+
         }
         canTravel = false;
         travel = false;
