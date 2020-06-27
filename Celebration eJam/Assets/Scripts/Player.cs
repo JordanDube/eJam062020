@@ -168,8 +168,8 @@ public class Player : MonoBehaviour
             {
                 Debug.Log(collision.gameObject.tag +" PICKUP");
 
-                collision.gameObject.transform.SetParent(gameObject.transform.GetChild(0));
-                collision.gameObject.transform.localPosition = new Vector3(0, 0, 0);
+                collision.gameObject.transform.SetParent(gameObject.transform.FindChild("ItemSpace"));
+                collision.gameObject.transform.localPosition = new Vector3(0, 0, -1);
                 pickup = false;
                 itemHeld = collision.gameObject.name;
                 collision.gameObject.GetComponent<BoxCollider2D>().enabled = false;
