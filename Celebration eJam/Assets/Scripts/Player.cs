@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Scripting.APIUpdating;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -44,6 +45,7 @@ public class Player : MonoBehaviour
     AudioSource audioSource;
     public AudioClip[] meow;
 
+    [SerializeField] Text travelText;
 
     private void Awake() {
         _animator = GetComponent<Animator>();
@@ -59,6 +61,8 @@ public class Player : MonoBehaviour
         gameManager = GameObject.Find("GameManager").gameObject.GetComponent<GameManager>();
         areaTracker[0] = true;
         audioSource = gameObject.GetComponent<AudioSource>();
+        travelText.enabled = false;
+        travelText.text = "";
     }
 
     private bool GameIsOver() {
@@ -222,6 +226,9 @@ public class Player : MonoBehaviour
         
         if (collision.gameObject.tag == "Door")
         {
+            travelText.enabled = true;
+            travelText.text = collision.gameObject.name;
+
             if (travel)
             {
                 canTravel = false;
@@ -317,6 +324,8 @@ public class Player : MonoBehaviour
         canTravel = false;
         canPeek = false;
         travel = false;
+        travelText.enabled = false;
+        travelText.text = "";
     }
 
     private void OnEnable()

@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class LineOfSight : MonoBehaviour {
 
@@ -7,6 +9,9 @@ public class LineOfSight : MonoBehaviour {
   private PolygonCollider2D _polygonCollider2D;
   private SpriteRenderer _spriteRenderer;
 
+  private Person _person;
+  private bool _facingRight = true;
+  
   public bool metalCatSolid = false;
   public float delay = 2f;
   
@@ -15,6 +20,8 @@ public class LineOfSight : MonoBehaviour {
     _spriteRenderer = GetComponent<SpriteRenderer>();
     _animator = GetComponent<Animator>();
 
+    _person = GetComponentInParent<Person>();
+    
     if (metalCatSolid)
       StartCoroutine(TactiCATEspionageAction());
   }
@@ -33,6 +40,18 @@ public class LineOfSight : MonoBehaviour {
       
       if(!stealthyKitty.IsHidden())
         _animator.SetTrigger("Seen");
+    }
+  }
+
+  private void Update() {
+    // int direction = _person.FacingRight ? 1 : -1;
+    // int direction = -1;
+    // Debug.Log(Mathf.Abs(-70));
+    // transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, -Mathf.Abs(transform.eulerAngles.z));
+    // _person.FacingRight ? 1 : -1
+    if (!_person.FacingRight.Equals(_facingRight)) {
+      transform.rotation = Quaternion.Inverse(transform.rotation);
+      _facingRight = _person.FacingRight;
     }
   }
 
