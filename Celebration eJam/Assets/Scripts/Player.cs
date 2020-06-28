@@ -22,9 +22,14 @@ public class Player : MonoBehaviour
     bool eat = false;
     public bool canTravel = false;
     public bool travel = false;
+
+    public bool canPeek = false;
+    public bool peek = false;
+
     Vector2 movementInput; //Holds left and right
     string itemHeld = ""; //Saves the string of the picked up item
     int sceneMove; //Holds the numbered scene you want to go to
+    int scenePeek; //Holds the numbered scene you want to peek to
     bool canJump = false; //if cat is touching ground, you can jump
 
     public bool[] areaTracker = new bool[5]; //Keeps track of what scene you're in so you're placed correctly in the next scene
@@ -49,7 +54,7 @@ public class Player : MonoBehaviour
         controls = new PlayerInputManager(); //assign controls class
         controls.Player.Interact.performed += ctx => Interact(); //triggers Spacebar method when spacebar is pressed
         controls.Player.Jump.performed += ctx => Jump();
-        
+
         rb = gameObject.GetComponent<Rigidbody2D>();
         gameManager = GameObject.Find("GameManager").gameObject.GetComponent<GameManager>();
         areaTracker[0] = true;
@@ -77,6 +82,16 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void Peek()
+    {
+        Debug.Log("PEEK!");
+        Debug.Log(canPeek);
+        if (canPeek)
+        {
+            peek = true;
+        }
+    }
+
     private void Interact()
     {
         Debug.Log("INTERACT");
@@ -97,6 +112,11 @@ public class Player : MonoBehaviour
         InteractWithObject();
 
         LeftRight();
+
+        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+        {
+            Peek();
+        }
     }
 
     private void InteractWithObject()
@@ -189,6 +209,7 @@ public class Player : MonoBehaviour
         if (collision.gameObject.tag == "Door")
         {
             canTravel = true;
+            canPeek = true;
         }
     }
 
@@ -243,6 +264,44 @@ public class Player : MonoBehaviour
             {
                 canTravel = true;
             }
+
+            if (peek)
+            {
+                canPeek = false;
+                switch (collision.gameObject.name)
+                {
+                    case "ToLivingRoom":
+                        scenePeek = 0;
+                        break;
+                    case "ToKitchen":
+                        scenePeek = 1;
+                        break;
+                    case "ToUpstairs":
+                        scenePeek = 2;
+                        break;
+                    case "ToBedroom":
+                        scenePeek = 3;
+                        break;
+                    case "ToBathroom":
+                        scenePeek = 4;
+                        break;
+                }
+
+
+                gameManager.PeekScene(sceneMove);
+            }
+            else
+            {
+                canPeek = true;
+                for (int i = 0; i < areaTracker.Length; i++)
+                {
+                    if (areaTracker[i])
+                    {
+                        gameManager.PeekScene(i);
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -256,6 +315,7 @@ public class Player : MonoBehaviour
 
         }
         canTravel = false;
+        canPeek = false;
         travel = false;
     }
 
