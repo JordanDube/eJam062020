@@ -19,6 +19,7 @@ public class Person : MonoBehaviour
 
     GameManager gameManager; //game manager
     public bool FacingRight { get; set; }
+    bool hasChangedFace = false;
 
     private Transform TargetTransform { get; set; }
     private float TargetThreshold { get; set; } = 2f;
@@ -29,7 +30,7 @@ public class Person : MonoBehaviour
 
 
     PersonState CurrentState = PersonState.Resting;
-    
+
 
     private void Awake()
     {
@@ -121,6 +122,7 @@ public class Person : MonoBehaviour
                 {
                     StateTimer = StateTimerDefault * Random.Range(5f, 7f);
                     CurrentState = PersonState.Roaming;
+                    hasChangedFace = false;
                     //CHANGING STATE TO ROAMING
                     //
                     //ONE TIME STATE CHANGE CODE HERE
@@ -132,10 +134,15 @@ public class Person : MonoBehaviour
                     canTravel = true;
                 }
 
-                if (Random.Range(0f, 10f) > 5)
+
+                if (Random.Range(0f, 10f) > 5 && hasChangedFace==false)
                 {
                     FacingRight = !FacingRight;
                 }
+
+                hasChangedFace = true;
+
+
                 break;
 
             case PersonState.Roaming:
