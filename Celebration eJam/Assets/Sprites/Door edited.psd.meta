@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: 24b57c24b53ccb840a83d76f6259b12c
+=======
+guid: c675f53e8935a4b40a9f41c49f5cc4fb
+>>>>>>> door-and-windows
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
