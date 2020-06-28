@@ -89,6 +89,11 @@ public class GameManager : MonoBehaviour
         GameObject.Find("Travel text").GetComponent<Text>().text = "";
     }
 
+    public void PeekScene(int toLocation)
+    {
+        mainCam.transform.position = new Vector3(cameraX[toLocation], 1, -10);
+    }
+
     public void SwitchScene(int toLocation, int fromLocation,Transform transform = null)
     {
         if(transform == null)
