@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         player = GameObject.Find("Cat").gameObject.GetComponent<Player>();
-        itemTracker = GameObject.Find("ItemNumberTracker").gameObject.GetComponent<ItemNumberTracker>();
+        itemTracker = GameObject.Find("ItemNumberTracker")?.gameObject?.GetComponent<ItemNumberTracker>() ?? new ItemNumberTracker();
         itemTracker.numberOfItems = 0;
         for(int i = 0; i < itemChecks.Length; i++)
         {
