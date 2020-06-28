@@ -30,7 +30,6 @@ public class GameManager : MonoBehaviour
         {
             itemChecks[i] = false;
         }
-        
     }
 
     public void GetItem(string item)
@@ -63,12 +62,19 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
+        int itemCounter = 0;
         for (int i = 0; i < itemChecks.Length; i++)
         {
             if(itemChecks[i])
             {
                 items[i].SetActive(false);
+                itemCounter++;
             }
+        }
+
+        if(itemCounter == 8)
+        {
+            OutOfTime();
         }
     }
 
