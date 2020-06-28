@@ -26,8 +26,8 @@ TagManager:
   - Line of Sight
   - Person
   - Cat
-  - 
-  - 
+  - Ground
+  - DoorForOnlyCat
   - 
   - 
   - 
@@ -56,15 +56,21 @@ TagManager:
   - name: Item
     uniqueID: 2175243863
     locked: 0
-  - name: Person
-    uniqueID: 2077445643
-    locked: 0
   - name: Cat
     uniqueID: 740976829
+    locked: 0
+  - name: Hiding spot
+    uniqueID: 1270464495
+    locked: 0
+  - name: Objects
+    uniqueID: 4060197437
     locked: 0
   - name: Item
     uniqueID: 2175243863
     locked: 0
   - name: Person
-    uniqueID: 2398758109
+    uniqueID: 2077445643
+    locked: 0
+  - name: Front
+    uniqueID: 3466110999
     locked: 0

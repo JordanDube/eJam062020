@@ -24,7 +24,7 @@ public class Person : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private Animator _animator;
     private Transform TargetTransform { get; set; }
-    private float TargetThreshold { get; set; } = 2f;
+    private float TargetThreshold { get; set; } = 3f;
 
     public bool canTravel = true;
     public bool travel = false;
@@ -55,7 +55,7 @@ public class Person : MonoBehaviour
 
         if (collision.gameObject.tag == "Walls")
         {
-            Debug.Log(gameObject.name + " Collided With " + collision.gameObject.name + " With Tag: " + collision.gameObject.tag);
+            //Debug.Log(gameObject.name + " Collided With " + collision.gameObject.name + " With Tag: " + collision.gameObject.tag);
 
             FlipDirection();
         }
@@ -64,7 +64,7 @@ public class Person : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Door")
+        if (collision.gameObject.tag == "Door" && collision.gameObject.layer != 13)
         {
             if (canTravel)
             {
@@ -97,6 +97,9 @@ public class Person : MonoBehaviour
                 {
                     if (areaTracker[i])
                     {
+
+
+
                         gameManager.SwitchScene(sceneMove, i, gameObject.transform);
                         areaTracker[i] = false;
                         areaTracker[sceneMove] = true; //makes the scene you're moving to the current scene
@@ -126,10 +129,12 @@ public class Person : MonoBehaviour
                 else
                 {
                     StateTimer = StateTimerDefault * Random.Range(5f, 7f);
-                    CurrentState = PersonState.Roaming;
                     
                     _animator.SetBool("Walking", true);
                     hasChangedFace = false;
+                    canTravel = true;
+
+
                     //CHANGING STATE TO ROAMING
                     //
                     //ONE TIME STATE CHANGE CODE HERE
@@ -138,7 +143,10 @@ public class Person : MonoBehaviour
                     {
                         audioSource.PlayOneShot(clip[0]);
                     }
-                    canTravel = true;
+
+
+                    CurrentState = PersonState.Roaming;
+
                 }
 
 
@@ -161,12 +169,14 @@ public class Person : MonoBehaviour
                 else
                 {
                     StateTimer = StateTimerDefault * Random.Range(0.5f, 2f);
-                    CurrentState = PersonState.Resting;
                     _animator.SetBool("Walking", false);
                     //CHANGING STATE TO RESTING
                     //
                     //ONE TIME STATE CHANGE CODE HERE
                     //
+
+                    CurrentState = PersonState.Resting;
+
                 }
                 break;
         }
@@ -244,13 +254,7 @@ public class Person : MonoBehaviour
         //
         //ONE TIME STATE CHANGE CODE HERE
         //
-        if (!audioSource.isPlaying)
-        {
             audioSource.PlayOneShot(clip[1]);
-        }
-
-        
-
     }
 
 }

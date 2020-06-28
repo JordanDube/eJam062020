@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -67,7 +69,9 @@ public class GameManager : MonoBehaviour
         {
             if(itemChecks[i])
             {
-                items[i].SetActive(false);
+                var itemText = items[i].GetComponent<TMP_Text>();
+                itemText.color = Color.green;
+                itemText.text = "<s><b>"+ itemText.text +"</b></s>";
                 itemCounter++;
             }
         }
@@ -85,8 +89,8 @@ public class GameManager : MonoBehaviour
         player.canTravel = false;
         player.travel = false;
         mainCam.transform.position = new Vector3(cameraX[toLocation], 1, -10);
-        GameObject.Find("Travel text").GetComponent<Text>().enabled = false;
-        GameObject.Find("Travel text").GetComponent<Text>().text = "";
+        GameObject.Find("Travel text").GetComponent<TMPro.TMP_Text>().enabled = false;
+        GameObject.Find("Travel text").GetComponent<TMPro.TMP_Text>().text = "";
     }
 
     public void PeekScene(int toLocation)
@@ -150,5 +154,6 @@ public class GameManager : MonoBehaviour
                 itemTracker.numberOfItems++;
             }
         }
+        SceneManager.LoadScene("End");
     }
 }

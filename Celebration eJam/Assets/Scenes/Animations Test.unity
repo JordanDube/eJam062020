@@ -9285,16 +9285,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3573387103117841287, guid: 1dcac8da686bce64f83ceed2342ab9a2,
-        type: 3}
-      propertyPath: titleText
-      value: 
-      objectReference: {fileID: 861111101}
-    - target: {fileID: 3573387103117841287, guid: 1dcac8da686bce64f83ceed2342ab9a2,
-        type: 3}
-      propertyPath: gameLength
-      value: 5
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1dcac8da686bce64f83ceed2342ab9a2, type: 3}
 --- !u!4 &5283398301222868640
@@ -9393,6 +9383,8 @@ MonoBehaviour:
   rb: {fileID: 0}
   canTravel: 0
   travel: 0
+  canPeek: 0
+  peek: 0
   areaTracker: 0100000000
   jumpHeight: 6
   movementSpeed: 5

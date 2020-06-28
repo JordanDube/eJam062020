@@ -356,7 +356,7 @@ GameObject:
   - component: {fileID: 5308082284256263114}
   m_Layer: 0
   m_Name: Person2
-  m_TagString: Untagged
+  m_TagString: Person
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -433,11 +433,11 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2077445643
-  m_SortingLayer: 1
-  m_SortingOrder: 0
+  m_SortingLayer: 5
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 92f88482b18ce5b42859d049ea2d35ff, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 1
+  m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 20, y: 40}
@@ -543,7 +543,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f0c005b0a0ee294fa64ef06634cee65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AreaStartingPoint: 0
+  AreaStartingPoint: 2
   clip:
   - {fileID: 8300000, guid: 72824c6c353ea32429c8f6589e2f173a, type: 3}
   - {fileID: 8300000, guid: e5949c1a673798846990248e0115fd72, type: 3}
@@ -1083,6 +1083,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SortingOrder
       value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2920019291551324577, guid: 437757c4ad063444b9b2607cd1add38a,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.39215687
       objectReference: {fileID: 0}
     - target: {fileID: 2920019291551324582, guid: 437757c4ad063444b9b2607cd1add38a,
         type: 3}

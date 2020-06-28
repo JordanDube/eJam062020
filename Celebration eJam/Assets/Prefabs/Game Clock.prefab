@@ -95,4 +95,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destination: {x: 60, y: -87.5, z: 0}
-  gameLength: 120
+  gameLength: 180
+  gameClockText: {fileID: 0}
+  gameIsOver: 0
+  addedTime: 0

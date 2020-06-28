@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Scripting.APIUpdating;
@@ -32,26 +33,35 @@ public class Player : MonoBehaviour
     int sceneMove; //Holds the numbered scene you want to go to
     int scenePeek; //Holds the numbered scene you want to peek to
     bool canJump = false; //if cat is touching ground, you can jump
-
+    public bool badKitty = false;
+    
     public bool[] areaTracker = new bool[5]; //Keeps track of what scene you're in so you're placed correctly in the next scene
     public float jumpHeight = 5f; //How much force is added to the player
     public float movementSpeed = 5f;
 
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
+    private BoxCollider2D _boxCollider2D;
 
     private GameClock _gameClock;
+    private Vector3 startingPoint;
 
     AudioSource audioSource;
     public AudioClip[] meow;
+    public AudioClip[] itemSounds;
+    public AudioClip angryParent;
+    public AudioClip depositItem;
+    public AudioClip bedBounce;
 
-    [SerializeField] Text travelText;
+    [SerializeField] TMPro.TMP_Text travelText;
 
     private void Awake() {
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _boxCollider2D = GetComponent<BoxCollider2D>();
 
         _gameClock = FindObjectOfType<GameClock>();
+        startingPoint = transform.position;
 
         controls = new PlayerInputManager(); //assign controls class
         controls.Player.Interact.performed += ctx => Interact(); //triggers Spacebar method when spacebar is pressed
@@ -69,33 +79,24 @@ public class Player : MonoBehaviour
     }
 
     private bool GameIsOver() {
+        if (badKitty)
+            return true;
+        
         if (_gameClock)
             return _gameClock.gameIsOver;
 
         return false;
     }
-    
-    private void Jump()
-    {
-        if (canTravel)
-        {
-            travel = true;
 
+    private void Jump() {
+        if (canTravel) {
+            travel = true;
         }
-        else if (canJump && !GameIsOver())
-        {
+        else if (canJump && !GameIsOver()) {
+            // _boxCollider2D.enabled = false;
+            Physics2D.IgnoreLayerCollision(11, 12, true);
             rb.velocity = Vector2.up * jumpHeight;
             canJump = false;
-        }
-    }
-
-    private void Peek()
-    {
-        Debug.Log("PEEK!");
-        Debug.Log(canPeek);
-        if (canPeek)
-        {
-            peek = true;
         }
     }
 
@@ -103,7 +104,7 @@ public class Player : MonoBehaviour
     {
         Debug.Log("INTERACT");
         Debug.Log(canInteract);
-        if (canInteract)
+        if (canInteract && itemHeld == "")
         {
             pickup = true;
             eat = true;
@@ -118,11 +119,34 @@ public class Player : MonoBehaviour
 
         InteractWithObject();
 
-        LeftRight();
-
-        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+        if (peek == false && badKitty == false)
         {
-            Peek();
+            LeftRight();
+        }
+
+        if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            if (canPeek)
+            {
+                peek = true;
+                gameManager.PeekScene(scenePeek);
+            }
+        }
+
+        if (Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.DownArrow))
+        {
+            peek = false;
+
+            for (int i = 0; i < areaTracker.Length; i++)
+            {
+                if (areaTracker[i])
+                {
+                    Debug.Log(i);
+                    gameManager.PeekScene(i);
+                    break;
+                }
+            }
+
         }
     }
 
@@ -140,16 +164,56 @@ public class Player : MonoBehaviour
 
                     interactableObject.gameObject.transform.SetParent(gameObject.transform.Find("ItemSpace"));
                     interactableObject.gameObject.transform.localPosition = new Vector3(0, 0, -1);
+                    eat = false;
                     pickup = false;
                     itemHeld = interactableObject.gameObject.name;
                     interactableObject.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+                    
+                    FindObjectsOfType<LineOfSight>().ToList().ForEach(los => {
+                        los.EnableLineOfSight();
+                    });
+
+                    switch(itemHeld) //plays sound depending on item
+                    {
+
+                        case "Hat":
+                            audioSource.PlayOneShot(itemSounds[0]);
+                            break;
+                        case "Noise Maker":
+                            audioSource.PlayOneShot(itemSounds[1]);
+                            break;
+                        case "Streamers":
+                            audioSource.PlayOneShot(itemSounds[2]);
+                            break;
+                        case "Cake":
+                            audioSource.PlayOneShot(itemSounds[3]);
+                            break;
+                        case "Cups":
+                            audioSource.PlayOneShot(itemSounds[4]);
+                            break;
+                        case "Cards":
+                            audioSource.PlayOneShot(itemSounds[5]);
+                            break;
+                        case "Balloon":
+                            audioSource.PlayOneShot(itemSounds[6]);
+                            break;
+                        case "PartyPopper":
+                            audioSource.PlayOneShot(itemSounds[7]);
+                            break;
+                    }
                 }
             }
             else if (interactableObject.gameObject.tag == "Food")
             {
                 canInteract = true;
-                if (eat)
+                if (eat) {
                     interactableObject.gameObject.GetComponent<Food>()?.ApplyUpgrade(this);
+                    audioSource.PlayOneShot(itemSounds[8]);
+                    eat = false;
+                    pickup = false;
+                    canInteract = false;
+                }
+                    
             }
         }
     }
@@ -161,8 +225,13 @@ public class Player : MonoBehaviour
         _animator.SetFloat("x", horizontalInput);
         _animator.SetFloat("y", rb.velocity.y);
         
-        if(horizontalInput != 0 && !GameIsOver()) {
-            _spriteRenderer.flipX = horizontalInput > 0 ? true : false;
+        if (rb.velocity.y <= 0f && Physics2D.GetIgnoreLayerCollision(11, 12)) {
+            Physics2D.IgnoreLayerCollision(11, 12, false);
+            // _boxCollider2D.enabled = true;
+        }
+
+            if(horizontalInput != 0 && !GameIsOver()) {
+                _spriteRenderer.flipX = horizontalInput > 0 ? true : false;
             var itemSpace = gameObject.transform.Find("ItemSpace");
             itemSpace.transform.localPosition = new Vector3(horizontalInput>0? 6.08f : -6.08f, itemSpace.transform.localPosition.y,itemSpace.transform.localPosition.z);
             transform.position = new Vector3(transform.position.x + (horizontalInput * movementSpeed * Time.deltaTime), transform.position.y, transform.position.z);
@@ -175,6 +244,11 @@ public class Player : MonoBehaviour
         {
             _animator.SetBool("Grounded", true);
             canJump = true;
+        }
+
+        if(collision.gameObject.name == "Bed")
+        {
+            audioSource.PlayOneShot(bedBounce);
         }
     }
 
@@ -208,9 +282,18 @@ public class Player : MonoBehaviour
 
         if (collision.gameObject.tag == "Bed")
         {
-            gameManager.GetItem(itemHeld);
-            Destroy(GameObject.Find(itemHeld));
-            itemHeld = "";
+            if(itemHeld != "")
+            {
+                gameManager.GetItem(itemHeld);
+                audioSource.PlayOneShot(depositItem);
+                Destroy(GameObject.Find(itemHeld));
+                itemHeld = "";
+            }
+            
+            
+            FindObjectsOfType<LineOfSight>().ToList().ForEach(los => {
+                los.DisableLineOfSight();
+            });
         }
 
         if (collision.gameObject.tag == "Door")
@@ -223,16 +306,12 @@ public class Player : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        
-        
-        
-        
         if (collision.gameObject.tag == "Door")
         {
             travelText.enabled = true;
             travelText.text = collision.gameObject.name;
 
-            if (travel)
+            if (travel && peek == false)
             {
                 canTravel = false;
                 switch (collision.gameObject.name)
@@ -275,9 +354,8 @@ public class Player : MonoBehaviour
                 canTravel = true;
             }
 
-            if (peek)
+            if (canPeek)
             {
-                canPeek = false;
                 switch (collision.gameObject.name)
                 {
                     case "ToLivingRoom":
@@ -297,27 +375,41 @@ public class Player : MonoBehaviour
                         break;
                 }
 
-
-                gameManager.PeekScene(sceneMove);
-            }
-            else
-            {
-                canPeek = true;
-                for (int i = 0; i < areaTracker.Length; i++)
-                {
-                    if (areaTracker[i])
-                    {
-                        gameManager.PeekScene(i);
-                        break;
-                    }
-                }
             }
         }
     }
 
+    public void ResetToSpawn() {
+        if (itemHeld.Length > 0) {
+            GameObject itemObj = GameObject.Find(itemHeld);
+            itemObj?.GetComponent<Item>().ResetItem();
+            itemHeld = "";
+
+        }
+
+        FindObjectsOfType<LineOfSight>().ToList().ForEach(los => {
+            los.DisableLineOfSight();
+        });
+        
+        for (int i = 0; i < areaTracker.Length; i++)
+        {
+            if (areaTracker[i])
+            {
+                gameManager.SwitchPlayerScene(0, i);
+                audioSource.PlayOneShot(angryParent);
+                areaTracker[i] = false;
+                areaTracker[0] = true; //makes the scene you're moving to the current scene
+                break;
+            }
+        }
+
+        transform.position = startingPoint + new Vector3(0f, 2f, 0f);
+
+    }
+
     private void OnTriggerExit2D(Collider2D collision) {
         if (collision.gameObject.tag == "Item" || collision.gameObject.tag == "Food") {
-            Debug.Log("Item left");
+            //Debug.Log("Item left");
             canInteract = false;
 
             interactableObject = null;
