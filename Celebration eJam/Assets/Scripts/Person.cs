@@ -18,7 +18,8 @@ public class Person : MonoBehaviour
     public float StateTimerDefault { get; set; } = 2f;
 
     GameManager gameManager; //game manager
-    public bool FacingRight { get; set; }
+
+    private bool FacingRight { get; set; }
 
     private Transform TargetTransform { get; set; }
     private float TargetThreshold { get; set; } = 2f;
