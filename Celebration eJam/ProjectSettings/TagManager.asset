@@ -62,3 +62,9 @@ TagManager:
   - name: Cat
     uniqueID: 740976829
     locked: 0
+  - name: Item
+    uniqueID: 2175243863
+    locked: 0
+  - name: Person
+    uniqueID: 2398758109
+    locked: 0

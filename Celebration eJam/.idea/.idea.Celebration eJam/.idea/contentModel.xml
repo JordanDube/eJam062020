@@ -57,12 +57,15 @@
           </e>
         </e>
         <e p="Scripts" t="Include">
+          <e p="EndText.cs" t="Include" />
           <e p="GameClock.cs" t="Include" />
           <e p="GameManager.cs" t="Include" />
           <e p="Item.cs" t="Include" />
+          <e p="ItemNumberTracker.cs" t="Include" />
           <e p="LineOfSight.cs" t="Include" />
           <e p="Person.cs" t="Include" />
           <e p="Player.cs" t="Include" />
+          <e p="StartGame.cs" t="Include" />
           <e p="StealthyKitty.cs" t="Include" />
           <e p="Upgrades" t="Include">
             <e p="Food.cs" t="Include" />
