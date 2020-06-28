@@ -20,6 +20,8 @@ public class Person : MonoBehaviour
     GameManager gameManager; //game manager
     public bool FacingRight { get; set; }
 
+    private SpriteRenderer _spriteRenderer;
+    private Animator _animator;
     private Transform TargetTransform { get; set; }
     private float TargetThreshold { get; set; } = 2f;
 
@@ -34,7 +36,10 @@ public class Person : MonoBehaviour
     private void Awake()
     {
         audioSource = gameObject.GetComponent<AudioSource>();
+        _spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        _animator = gameObject.GetComponent<Animator>();
     }
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -51,7 +56,7 @@ public class Person : MonoBehaviour
         {
             Debug.Log(gameObject.name + " Collided With " + collision.gameObject.name + " With Tag: " + collision.gameObject.tag);
 
-            FacingRight = !FacingRight;
+            FlipDirection();
         }
 
     }
@@ -121,6 +126,7 @@ public class Person : MonoBehaviour
                 {
                     StateTimer = StateTimerDefault * Random.Range(5f, 7f);
                     CurrentState = PersonState.Roaming;
+                    _animator.SetBool("Walking", true);
                     //CHANGING STATE TO ROAMING
                     //
                     //ONE TIME STATE CHANGE CODE HERE
@@ -134,7 +140,7 @@ public class Person : MonoBehaviour
 
                 if (Random.Range(0f, 10f) > 5)
                 {
-                    FacingRight = !FacingRight;
+                    FlipDirection();
                 }
                 break;
 
@@ -148,6 +154,7 @@ public class Person : MonoBehaviour
                 {
                     StateTimer = StateTimerDefault * Random.Range(0.5f, 2f);
                     CurrentState = PersonState.Resting;
+                    _animator.SetBool("Walking", false);
                     //CHANGING STATE TO RESTING
                     //
                     //ONE TIME STATE CHANGE CODE HERE
@@ -162,6 +169,11 @@ public class Person : MonoBehaviour
     }
 
 
+    private void FlipDirection() {
+        FacingRight = !FacingRight;
+        _spriteRenderer.flipX = FacingRight;
+    }
+    
     private void DoAction()
     {
         //IF state is set then do a specific action
