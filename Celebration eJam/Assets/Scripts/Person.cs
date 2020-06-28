@@ -19,6 +19,7 @@ public class Person : MonoBehaviour
 
     GameManager gameManager; //game manager
     public bool FacingRight { get; set; }
+    bool hasChangedFace = false;
 
     private SpriteRenderer _spriteRenderer;
     private Animator _animator;
@@ -31,7 +32,7 @@ public class Person : MonoBehaviour
 
 
     PersonState CurrentState = PersonState.Resting;
-    
+
 
     private void Awake()
     {
@@ -126,7 +127,9 @@ public class Person : MonoBehaviour
                 {
                     StateTimer = StateTimerDefault * Random.Range(5f, 7f);
                     CurrentState = PersonState.Roaming;
+                    
                     _animator.SetBool("Walking", true);
+                    hasChangedFace = false;
                     //CHANGING STATE TO ROAMING
                     //
                     //ONE TIME STATE CHANGE CODE HERE
@@ -138,10 +141,15 @@ public class Person : MonoBehaviour
                     canTravel = true;
                 }
 
-                if (Random.Range(0f, 10f) > 5)
+
+                if (Random.Range(0f, 10f) > 5 && hasChangedFace==false)
                 {
                     FlipDirection();
                 }
+
+                hasChangedFace = true;
+
+
                 break;
 
             case PersonState.Roaming:
@@ -184,7 +192,7 @@ public class Person : MonoBehaviour
             case PersonState.Roaming:
 
 
-                float roamingMoveAmount = Random.Range(1, 15) * 0.5f * Time.deltaTime * (FacingRight ? 1 : -1);
+                float roamingMoveAmount = Random.Range(1, 8) * 0.5f * Time.deltaTime * (FacingRight ? 1 : -1);
                 transform.position = new Vector3(transform.position.x + roamingMoveAmount, transform.position.y, transform.position.z);
                 break;
             case PersonState.Alerted:
