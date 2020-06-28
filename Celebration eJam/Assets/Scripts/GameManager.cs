@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,13 +14,23 @@ public class GameManager : MonoBehaviour
     public bool balloon = false;
     public bool partyPopper = false;
 
+    bool[] itemChecks = new bool[8];
     [SerializeField] int[] cameraX;
     [SerializeField] GameObject mainCam;
+    [SerializeField] GameObject []items;
     Player player;
+    ItemNumberTracker itemTracker;
 
     private void Awake()
     {
         player = GameObject.Find("Cat").gameObject.GetComponent<Player>();
+        itemTracker = GameObject.Find("ItemNumberTracker").gameObject.GetComponent<ItemNumberTracker>();
+        itemTracker.numberOfItems = 0;
+        for(int i = 0; i < itemChecks.Length; i++)
+        {
+            itemChecks[i] = false;
+        }
+        
     }
 
     public void GetItem(string item)
@@ -27,22 +38,37 @@ public class GameManager : MonoBehaviour
         switch(item)
         {
             case "Hat": //check off hat
-                Debug.Log("Got the hat");
+                itemChecks[0] = true;
                 break;
-            case "Noise Maker": //check off rubber duck
+            case "Noise Maker": //check off hat
+                itemChecks[1] = true;
                 break;
-            case "Streamers": //check off blinds
+            case "Streamers": //check off hat
+                itemChecks[2] = true;
                 break;
-            case "Cups": //check off cups
+            case "Cups": //check off hat
+                itemChecks[3] = true;
                 break;
             case "Cake": //check off hat
+                itemChecks[4] = true;
                 break;
             case "Cards": //check off hat
+                itemChecks[5] = true;
                 break;
             case "Balloon": //check off hat
+                itemChecks[6] = true;
                 break;
             case "PartyPopper": //check off hat
+                itemChecks[7] = true;
                 break;
+        }
+
+        for (int i = 0; i < itemChecks.Length; i++)
+        {
+            if(itemChecks[i])
+            {
+                items[i].SetActive(false);
+            }
         }
     }
 
@@ -53,6 +79,8 @@ public class GameManager : MonoBehaviour
         player.canTravel = false;
         player.travel = false;
         mainCam.transform.position = new Vector3(cameraX[toLocation], 1, -10);
+        GameObject.Find("Travel text").GetComponent<Text>().enabled = false;
+        GameObject.Find("Travel text").GetComponent<Text>().text = "";
     }
 
     public void SwitchScene(int toLocation, int fromLocation,Transform transform = null)
@@ -102,4 +130,14 @@ public class GameManager : MonoBehaviour
 
     }
     
+    public void OutOfTime()
+    {
+        for(int i = 0; i < itemChecks.Length; i++)
+        {
+            if(itemChecks[i])
+            {
+                itemTracker.numberOfItems++;
+            }
+        }
+    }
 }
