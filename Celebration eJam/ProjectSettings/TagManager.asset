@@ -53,12 +53,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Item
+    uniqueID: 2175243863
+    locked: 0
   - name: Person
     uniqueID: 2077445643
     locked: 0
   - name: Cat
     uniqueID: 740976829
-    locked: 0
-  - name: Item
-    uniqueID: 2175243863
     locked: 0

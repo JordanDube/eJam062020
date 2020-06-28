@@ -172,7 +172,7 @@ public class Person : MonoBehaviour
             case PersonState.Roaming:
 
 
-                float roamingMoveAmount = Random.Range(1, 15) * 0.5f * Time.deltaTime * (FacingRight ? 1 : -1);
+                float roamingMoveAmount = Random.Range(1, 8) * 0.5f * Time.deltaTime * (FacingRight ? 1 : -1);
                 transform.position = new Vector3(transform.position.x + roamingMoveAmount, transform.position.y, transform.position.z);
                 break;
             case PersonState.Alerted:
