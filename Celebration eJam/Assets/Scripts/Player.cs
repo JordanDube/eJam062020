@@ -52,7 +52,7 @@ public class Player : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
 
         _gameClock = FindObjectOfType<GameClock>();
-        
+
         controls = new PlayerInputManager(); //assign controls class
         controls.Player.Interact.performed += ctx => Interact(); //triggers Spacebar method when spacebar is pressed
         controls.Player.Jump.performed += ctx => Jump();
@@ -61,8 +61,11 @@ public class Player : MonoBehaviour
         gameManager = GameObject.Find("GameManager").gameObject.GetComponent<GameManager>();
         areaTracker[0] = true;
         audioSource = gameObject.GetComponent<AudioSource>();
-        travelText.enabled = false;
-        travelText.text = "";
+        if (travelText != null)
+        {
+            travelText.enabled = false;
+            travelText.text = "";
+        }
     }
 
     private bool GameIsOver() {
